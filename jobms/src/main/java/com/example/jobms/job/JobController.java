@@ -18,9 +18,9 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobWithCompanyDTO>> findAll()
-    {
-        return ResponseEntity.ok(jobService.findAll());
+    public ResponseEntity<List<JobWithCompanyDTO>> findAll() {
+        List<JobWithCompanyDTO> jobs = jobService.findAll();
+        return ResponseEntity.ok(jobs);
     }
     @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job){

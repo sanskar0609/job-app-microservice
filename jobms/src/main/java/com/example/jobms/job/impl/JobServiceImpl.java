@@ -26,22 +26,30 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobWithCompanyDTO> findAll() {
-        List<Job> jobs=jobRepository.findAll();
-        List<JobWithCompanyDTO> jobWithCompanyDTOS=new ArrayList<>();
+        List<Job> jobs = jobRepository.findAll();
+        List<JobWithCompanyDTO> jobWithCompanyDTOS = new ArrayList<>();
+        RestTemplate restTemplate = new RestTemplate();
 
-
-        RestTemplate restTemplate=new RestTemplate();
-
-        for(Job job:jobs){
-            JobWithCompanyDTO jobWithCompanyDTO=new JobWithCompanyDTO();
+        for (Job job : jobs) {
+            JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO();
             jobWithCompanyDTO.setJob(job);
-            Company company=restTemplate.getForObject("http://localhost:7073/companies/"+job.getCompanyId(), Company.class);
-            jobWithCompanyDTO.setCompany(company);
-            jobWithCompanyDTOS.add(jobWithCompanyDTO);
 
+            try {
+                System.out.println("Fetching company details for Job ID: " + job.getId());
+                Company company = restTemplate.getForObject("http://localhost:7073/companies/" + job.getCompanyId(), Company.class);
+                jobWithCompanyDTO.setCompany(company);
+            } catch (Exception e) {
+                System.err.println("Error fetching company details for Job ID: " + job.getId());
+                e.printStackTrace();
+                jobWithCompanyDTO.setCompany(null); // Set company to null to prevent failure
+            }
+
+            jobWithCompanyDTOS.add(jobWithCompanyDTO);
         }
+
         return jobWithCompanyDTOS;
     }
+
 
 
     @Override
