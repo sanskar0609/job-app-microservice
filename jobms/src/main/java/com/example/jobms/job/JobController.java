@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping("/jobs")
 public class JobController {
     private  JobService jobService;
@@ -17,9 +18,9 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobWithCompanyDTO>> findAll()
-    {
-        return ResponseEntity.ok(jobService.findAll());
+    public ResponseEntity<List<JobWithCompanyDTO>> findAll() {
+        List<JobWithCompanyDTO> jobs = jobService.findAll();
+        return ResponseEntity.ok(jobs);
     }
     @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job){

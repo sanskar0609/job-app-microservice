@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  microservice1:
+    build:
+      context: ./companyms
+      dockerfile: Dockerfile
+    container_name: companyms
+    ports:
+      - "7073:7073"
+    networks:
+      - mynetwork
+
+  microservice2:
+    build:
+      context: ./jobms
+      dockerfile: Dockerfile
+    container_name: jobms
+    ports:
+      - "7072:7072"
+    networks:
+      - mynetwork
+
+  microservice3:
+    build:
+      context: ./reviewms
+      dockerfile: Dockerfile
+    container_name: reviewms
+    ports:
+      - "7074:7074"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
